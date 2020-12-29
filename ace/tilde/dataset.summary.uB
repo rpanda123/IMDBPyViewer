@@ -1,0 +1,25 @@
+/** -------------------------------------------------
+ ** Algorithm:   Tilde
+ ** Output type: summary.uB
+ ** Date:        8/23/2012 4:16:22
+ ** ACE version: 1.2.18
+ ** Hardware:    jander: x86_64 running linux
+ ** -------------------------------------------------
+ **/
+
+Average discretization time: 0.0 (stderr: 0.0)
+Average induction time: 21309.5933333333 (stderr: 740.56849337366)
+
+Model:
+    Complexity: 453.0 nodes, 453.0 literals
+Training:
+    Number of examples: 27316
+    Pearson correlation: [0.740473054244004]
+    MSE: [0.805362826098219]
+    MAE: [0.660270932626024]
+Testing:
+    Number of examples: 13658
+    Pearson correlation: [0.563640492342776]
+    MSE: [1.26971902206591]
+    MAE: [0.858293732183278]
+

@@ -1,0 +1,138 @@
+:- ['intDate.pl'].
+
+admissionsInf(Key,Tickets,Threshold,Duration,Country) :- 
+	admissions_in_days(Key,Tickets,Duration,Country), 
+	threshold_admissions(Threshold), Tickets >= Threshold.
+admissionsSup(Key,Tickets,Threshold,Duration,Country) :- 
+	admissions_in_days(Key,Tickets,Duration,Country), 
+	threshold_admissions(Threshold), Tickets =< Threshold.
+
+votesInf(Key,Votes) :- threshold_votes(Threshold), Votes >= Threshold.
+votesSup(Key,Votes) :- threshold_votes(Threshold), Votes =< Threshold.
+
+distributor_country(Movie,Country) :- 
+	distributors(Movie,Company), company_country(Company, Country).
+production_country(Movie,Country) :- 
+	production_companies(Movie,Company), company_country(Company, Country).
+special_effects_country(Movie,Country) :- 
+	special_effects_companies(Movie,Company), company_country(Company, Country).
+miscellaneous_country(Movie,Country) :- 
+	miscellaneous_companies(Movie,Company), company_country(Company, Country).
+
+distributor_name(Movie,Name) :- 
+	distributors(Movie,Company), company_name(Company, Name).
+production_name(Movie,Name) :- 
+	production_companies(Movie,Company), company_name(Company, Name).
+special_effects_name(Movie,Name) :- 
+	special_effects_companies(Movie,Company), company_name(Company, Name).
+miscellaneous_name(Movie,Name) :- 
+	miscellaneous_companies(Movie,Company), company_name(Company, Name).
+
+release_season(Movie, Country, Season) :- 
+	release_date(Movie,Country, _, Month, Day, _), 
+	number(Day), season(Day, Month, Season).
+
+gender_director(Movie, Gender) :- 
+	director(Movie, Director), gender(Director, Gender).
+
+
+season(_,january,winter).
+season(_,february,winter).
+season(Day,march,winter) :- Day < 21.
+season(Day,march,spring) :- Day >= 21.
+season(_,april,spring).
+season(_,may,spring).
+season(Day,june,spring) :- Day < 22.
+season(Day,june,summer) :- Day >= 22.
+season(_,july,summer).
+season(_,august,summer).
+season(Day,september,summer) :- Day < 23.
+season(Day,september,autumn) :- Day >= 23.
+season(_,october,autumn).
+season(_,november,autumn).
+season(Day,december,autumn) :- Day < 21.
+season(Day,december,winter) :- Day >= 21.
+
+:- findall(Keyword, keywords(_,Keyword), ListValues), 
+sort(ListValues, Sorted),
+member(Val,Sorted),
+assert(a_keyword(Val)).
+
+:- findall((Color,Extra), color_info(_,Color,Extra), ListValues), 
+sort(ListValues, Sorted),
+member((Color2,Extra2),Sorted),
+assert(a_couple_color(Color2,Extra2)).
+
+:- findall((Sound,Extra), sound_mix(_,Sound,Extra), ListValues), 
+sort(ListValues, Sorted),
+member((Sound2,Extra2),Sorted),
+assert(a_couple_sound(Sound2,Extra2)).
+
+%:- findall(Value, admissions(_,Tickets,_,_,_,_,_), ListAdmissions),
+%sort(ListValues, Sorted),
+%length(Sorted,N),
+
+admissions_in_days(Movie, Admissions, Duration, Country) :- 
+	admissions(Movie,Admissions,Currency,Country,Day,Month,Year), 
+	number(Day), number(Year), date_integer(date(Day,Month,Year), Date), 
+	release_date(Movie, Country, Year2, Month2, Day2,_), number(Day2), 
+	number(Year2), date_integer(date(Day2,Month2,Year2), Date2), 
+	Duration is Date - Date2, Duration > 0.
+
+:- findall(Ad, admissions_in_days(_,Ad,_,_), ListAd),
+sort(ListAd, Sorted),
+length(Sorted, N),
+N1 is N // 5,
+N2 is (2*N)//5,
+N3 is (3*N)//5,
+N4 is (4*N)//5,
+nth(N1, Sorted, Th1),nth(N2, Sorted, Th2),
+nth(N3, Sorted, Th3),nth(N4, Sorted, Th4),
+assert(threshold_admissions(Th1)),
+assert(threshold_admissions(Th2)),
+assert(threshold_admissions(Th3)),
+assert(threshold_admissions(Th4)).
+
+:- findall(Ad, votes(_, Ad) ,ListAd),
+sort(ListAd, Sorted),
+length(Sorted, N),
+N1 is N // 5,
+N2 is (2*N)//5,
+N3 is (3*N)//5,
+N4 is (4*N)//5,
+nth(N1, Sorted, Th1),nth(N2, Sorted, Th2),
+nth(N3, Sorted, Th3),nth(N4, Sorted, Th4),
+assert(threshold_votes(Th1)),
+assert(threshold_votes(Th2)),
+assert(threshold_votes(Th3)),
+assert(threshold_votes(Th4)).
+
+:- findall(Genre,genre(_,Genre),List),
+sort(List,Sorted),
+member(G,Sorted),
+assert(a_genre(G)).
+
+:- findall(CountryTrue,country(_,CountryTrue),List),
+sort(List,Sorted),
+member(CT,Sorted),
+assert(a_countrytrue(CT)).
+
+:- findall(Country,company_country(_,Country),List),
+sort(List,Sorted),
+member(C,Sorted),
+assert(a_country(C)).
+
+:- findall(Name,company_name(_,Name),List),
+sort(List,Sorted),
+member(C,Sorted),
+assert(a_name(C)).
+
+:- assert(a_season(spring)),
+assert(a_season(summer)),
+assert(a_season(autumn)),
+assert(a_season(winter)).
+
+:- findall(Rating,certificate(_,_,Rating),List),
+sort(List,Sorted),
+member(R,Sorted),
+assert(a_rating(R)).
