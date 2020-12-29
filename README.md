@@ -19,9 +19,11 @@ Caveats:
 
 -Votes: requirement constraint and range constraint will speed up the process
  Only titles with the correct amount of votes are tried.
+ 
 -all companies selected in upper box + no further links to other entities
  will speed up the companies generation
  (no IMDbPY is used because it grabs links and this can take a while)
+ 
 -Miniseries do not exist in the database
 
 For developers:
