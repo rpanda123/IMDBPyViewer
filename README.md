@@ -4,9 +4,9 @@ A program written in Python to generate relational datasets in Prolog format. It
 Install:
 --------
 
-PyQt4
-SQLAlchemy
-IMDbPY
+1)PyQt4
+2)SQLAlchemy
+3)IMDbPY
 
 Run imdbpy2sql.py to populate the database.
 Grab the plain text data files from http://www.imdb.com/interfaces
